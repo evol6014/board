@@ -1,0 +1,133 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/boards}">
+	
+<head>
+<link rel="stylesheet" href="../css/bootstrap.css" th:remove="all">
+<link rel="stylesheet" href="../css/animate.css" th:remove="all">
+</head>
+
+<div layout:fragment="content">
+
+	<div class="panel-heading"><b>Emps Modify Page</b></div>
+	<div class="panel-body">
+
+    <form id='f1'>
+
+		<div class="form-group">
+			<label>Empno</label> <input class="form-control" name="empno" readonly="readonly"
+				th:value="${vo.empno}" />
+		</div>
+		<div class="form-group">
+			<label>Ename</label> <input class="form-control" name="ename"
+				th:value="${vo.ename}" />
+			<p class="help-block">Ename text here.</p>
+		</div>
+<!-- 	<div class="form-group">
+				<label>성별</label> 
+				<select name="gender" th:value="${vo.gender}">
+					<option>[[${vo.gender.name()} == 'F' ? 'F' : 'M']]</option>
+					<option th:selected="${vo.gender} == 'M'">M</option>
+					<option th:selected="${vo.gender} == 'F'">F</option>
+				</select>
+				
+				<label>직급</label>
+				<select name="job" th:value="${vo.job}">
+					<option selected="selected">[[${vo.job}]]</option>
+					<option th:if="${vo.job != '부장'}">부장</option>
+					<option th:if="${vo.job != '차장'}">차장</option>
+					<option th:if="${vo.job != '과장'}">과장</option>
+					<option th:if="${vo.job != '대리'}">대리</option>
+					<option th:if="${vo.job != '사원'}">사원</option>
+				</select>
+				
+				<label>부서번호</label>
+				<select name="deptno" th:value="${vo.dept?.deptno}">
+					<option selected="selected">[[${vo.dept?.deptno}]]</option>
+					<option th:if="${vo.dept?.deptno != 10}">10</option>
+					<option th:if="${vo.dept?.deptno != 20}">20</option>
+					<option th:if="${vo.dept?.deptno != 30}">30</option>
+				</select>
+		</div> -->
+		<div class="form-group">
+			<label>Gender</label> <input class="form-control" name="gender"
+				th:value="${vo.gender}" />
+		</div>
+		<div class="form-group">
+			<label>Job</label> <input class="form-control" name="job"
+				th:value="${vo.job}" />
+		</div>
+		<div class="form-group">
+			<label>Manager</label> <input class="form-control" name="mgr"
+				th:value="${vo.mgr.empno}" />
+		</div>
+		<div class="form-group">
+			<label>Hiredate</label> <input class="form-control" name="hiredate"
+				th:value="${vo.hiredate}" />
+		</div>
+		<div class="form-group">
+			<label>Salary</label> <input class="form-control" name="sal"
+				th:value="${vo.sal}" />
+		</div>
+		<div class="form-group">
+			<label>Commission</label> <input class="form-control" name="comm"
+				th:value="${vo.comm}" />
+		</div>
+		<div class="form-group">
+			<label>Deptno</label> <input class="form-control" name="dept"
+				th:value="${vo.dept.deptno}" />
+		</div>
+		
+		<input type='hidden' name="page" th:value="${pageVO.page}">
+		<input type='hidden' name="size" th:value="${pageVO.size}">
+		<input type='hidden' name="type" th:value="${pageVO.type}">
+		<input type='hidden' name="keyword" th:value="${pageVO.keyword}">
+		
+		</form>
+
+		<div class="pull-right">
+		
+		 	<a href="#" class="btn btn-warning modbtn">Modify</a>
+		 	<a href="#" class="btn btn-danger delbtn">Delete</a>
+
+			<a th:href="@{ list(page=${pageVO.page}, 
+			                size=${pageVO.size}, 
+			                type=${pageVO.type}, 
+			                keyword=${pageVO.keyword},
+			                empno = ${vo.empno}
+			             )}" class="btn btn-primary">Cancel & Go List</a> 
+		</div>
+
+	</div>
+
+</div>
+<!--  end fragment -->
+
+<th:block layout:fragment="script">
+
+	<script th:inline="javascript">
+
+	$(document).ready(function(){
+		
+		var formObj = $("#f1");
+		
+		$(".delbtn").click(function(){
+			
+			formObj.attr("action","delete");
+			formObj.attr("method", "post");
+			
+			formObj.submit();
+		});
+		
+		$(".modbtn").click(function(){
+			
+			formObj.attr("action","modify");
+			formObj.attr("method", "post");
+			
+			formObj.submit();
+		});
+	});	
+	
+	</script>
+
+</th:block>

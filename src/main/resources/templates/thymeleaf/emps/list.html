@@ -1,0 +1,164 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/boards}">
+	<!-- list가 호출되면 boards와 merge된다. -->
+
+<head>
+<link rel="stylesheet" href="../css/bootstrap.css" th:remove="all">
+<link rel="stylesheet" href="../css/animate.css" th:remove="all">
+</head>
+
+<div layout:fragment="content">
+
+	<div class="panel-heading"><b>Emps List Page</b></div>
+
+	<div class="panel-body">
+		<p>[[${pageMaker.result}]]</p>
+		<div th:with="result=${pageMaker.result}" style="width:100%; height:auto; overflow:auto">
+			<!--pageMaker안의 result를(db에서가져온) 로컬변수 리졀트로 받음 -->
+			
+			<table class="table table-striped table-bordered table-hover" 
+				id="dataTables-example">
+				<thead>
+					<tr>
+						<th>EMPNO</th>
+						<th>ENAME</th>
+						<th>GENDER</th>
+						<th>JOB</th>
+						<th>MANAGER</th>
+						<th>HIREDATE</th>
+						<th>SALARY</th>
+						<th>COMMISSION</th>
+						<th>DEPTNO</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="odd gradeX center"th:each="emp:${result.content}">
+						<td>[[${emp.empno}]]</td>
+						<td><a th:href="${emp.empno}" class="empLink">[[${emp.ename}]]</a></td>
+						<th:block data-th-switch="${emp.gender.name()}">
+							<td data-th-case="M">남자</td>
+							<td data-th-case="F">여자</td>
+							<td data-th-case="*">???</td>
+						</th:block>
+						<td>[[${emp.job}]]</td>
+						<td>[[${emp.mgr == null ? 'No' : emp.mgr.ename}]]</td>
+						<td>
+							[[${#dates.format(emp.hiredate, 'yyyy-MM-dd')}]]
+						</td>
+						<td th:text="${#numbers.formatInteger(emp.sal, 3, 'COMMA')}"></td>
+						<td>[[${emp.comm}]]</td>
+						<td>[[${emp.dept?.deptno}]]</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<div>
+				<select id="searchType">
+					<option>--</option>
+					<option value="n" th:selected="${pageVO.type} == 'n'">Empno</option>
+					<option value="i" th:selected="${pageVO.type} == 'i'">Ename</option>
+					<option value="j" th:selected="${pageVO.type} == 'j'">Job</option>
+					<option value="s" th:selected="${pageVO.type} == 's'">Sal</option>
+					<option value="c" th:selected="${pageVO.type} == 'c'">Comm</option>
+					<option value="d" th:selected="${pageVO.type} == 'd'">deptno</option>
+				</select>
+				<input type="text" id="searchKeyword" th:value="${pageVO.keyword}">
+				<button id="searchBtn">Search</button>
+			</div>
+						
+			<div class="panel-body pull-right">
+				<h3><a class="label label-default" th:href="@{register}">Register</a></h3>
+			</div>
+	
+		</div>
+		
+		<!-- paging -->
+		<nav>
+			<div>
+				<ul class="pagination">
+					<li class="page-item" th:if="${pageMaker.prevPage}">
+						<a th:href="${pageMaker.prevPage.pageNumber} + 1">PREV [[${pageMaker.prevPage.pageNumber} + 1]]</a>
+					</li>
+					<li class="page-item" th:classappend="${p.pageNumber == pageMaker.currentPageNum-1} ? active : '' " 
+											 th:each="p : ${pageMaker.pageList}">
+						<a th:href="${p.pageNumber} + 1">[[${p.PageNumber} + 1]]</a>
+					</li>
+					<li class="page-item" th:if="${pageMaker.nextPage}">
+						<a th:href="${pageMaker.nextPage.pageNumber} + 1">NEXT [[${pageMaker.nextPage.pageNumber} + 1]]</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<!-- end page display -->
+	</div>
+	<!-- end panel -->
+	
+		<form id='f1' th:action="@{list}" method="get">
+			<input type='hidden' name='page' th:value=${pageMaker.currentPageNum}>
+			<input type='hidden' name='size' th:value=${pageMaker.currentPage.pageSize}>
+			<input type='hidden' name='type' th:value=${pageVO.type}>
+			<input type='hidden' name='keyword' th:value=${pageVO.keyword}>
+		</form>
+
+</div>
+<!-- end fragment -->
+
+<th:block layout:fragment="script">
+
+	<script th:inline="javascript">
+	
+		$(window).load(function(){
+			
+			var msg = [[${msg}]];
+			
+			if(msg == "success") {
+				alert("정상적으로 처리되었습니다.");
+				var stateObj = { msg: "" };
+			}
+	
+		});
+	
+		$(document).ready(function(){
+			
+			var formObj = $("#f1");
+	
+			$(".pagination a").click(function(e) {
+				e.preventDefault();
+		
+				formObj.find('[name="page"]').val($(this).attr('href'));
+				formObj.submit();
+			});	
+			
+			$(".empLink").click(function(e){
+				
+				e.preventDefault(); 
+				
+				var empNo = $(this).attr("href");
+				
+				formObj.attr("action",[[@{'/emps/view'}]]);
+				formObj.append("<input type='hidden' name='empno' value='" + empNo +"'>" );
+				
+				formObj.submit();
+				
+			});
+			
+			$("#searchBtn").click(function(e){
+				
+				var typeStr = $("#searchType").find(":selected").val();
+				var keywordStr = $("#searchKeyword").val();
+				
+				console.log(typeStr, "" , keywordStr);
+				
+				formObj.find("[name='type']").val(typeStr);
+				formObj.find("[name='keyword']").val(keywordStr);
+				formObj.find("[name='page']").val("1");
+				formObj.submit();
+			});
+		});
+		
+		
+
+
+	</script>
+</th:block>

@@ -1,0 +1,99 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/boards}">
+
+<head>
+<link rel="stylesheet" href="../css/bootstrap.css" th:remove="all">
+<link rel="stylesheet" href="../css/animate.css" th:remove="all">
+</head>
+
+<div layout:fragment="content">
+
+	<div class="panel-heading"><b>Emps Register Page</b></div>
+	<div class="panel-body">
+		
+		<form th:action="@{register}" method="post">
+			
+			<div class="form-group">
+			<label>Empno</label> <input class="form-control" name="empno"
+				th:value="${vo.empno}" />
+			</div>
+			<div class="form-group">
+				<label>Ename</label> <input class="form-control" name="ename"
+					th:value="${vo.ename}" />
+				<p class="help-block">Ename text here.</p>
+			</div>
+<!-- 			<div class="form-group">
+				<label>Gender</label>
+				<select name="gender">
+					<option>--</option>
+					<option>M</option>
+					<option>F</option>
+				</select>
+			
+				<label>Job</label>
+				<select name="job">
+					<option>--</option>
+					<option>부장</option>
+					<option>차장</option>
+					<option>과장</option>
+					<option>대리</option>
+					<option>사원</option>
+				</select>
+			
+				<label>Deptno</label>
+				<select name="deptno">
+					<option>--</option>
+					<option>10</option>
+					<option>20</option>
+					<option>30</option>
+				</select>
+	 			</div> -->
+			<div class="form-group">
+				<label>Gender</label> <input class="form-control" name="gender"
+					th:value="${vo.gender}" />
+			</div>
+			<div class="form-group">
+				<label>Job</label> <input class="form-control" name="job"
+					th:value="${vo.job}" />
+			</div>
+			<div class="form-group">
+				<label>Manager</label> <input class="form-control" name="mgr"
+					th:value="${vo.mgr}" />
+			</div>
+			<div class="form-group">
+				<label>Hiredate</label> <input class="form-control" name="hiredate"
+					th:value="${vo.hiredate}" />
+			</div>
+<!-- 		<div class="form-group"> 
+				<label>Hiredate</label>
+				<input class="form-control" name="hiredate" th:value="${#dates.format(vo.hiredate, 'MM/dd/yyyy')}"/>
+				<p class="help-block">mm/dd/yyyy</p>
+ 			</div> -->
+			<div class="form-group">
+				<label>Salary</label> <input class="form-control" name="sal"
+					th:value="${vo.sal}" />
+			</div>
+			<div class="form-group">
+				<label>Commission</label> <input class="form-control" name="comm"
+					th:value="${vo.comm}" />
+			</div>
+			<div class="form-group">
+				<label>Deptno</label> <input class="form-control" name="dept"
+					th:value="${vo.dept?.deptno}" />
+			</div>
+			
+			<button type="submit" class="btn btn-default">Submit Button</button>
+			<button type="reset" class="btn btn-primary">Reset Button</button>
+		</form>
+	</div>
+</div>
+<!--  end fragment -->
+
+<th:block layout:fragment="script">
+
+	<script th:inline="javascript">
+
+
+	</script>
+</th:block>

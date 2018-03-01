@@ -1,0 +1,58 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/boards}">
+	
+<head>
+<link rel="stylesheet" href="../css/bootstrap.css" th:remove="all">
+<link rel="stylesheet" href="../css/animate.css" th:remove="all">
+</head>
+
+<div layout:fragment="content">
+
+	<div class="panel-heading"><b>Depts View Page</b></div>
+	<div class="panel-body">
+
+		<div class="form-group">
+			<label>Deptno</label> <input class="form-control" name="deptno"
+				th:value="${vo.deptno}" readonly="readonly" />
+			<p class="help-block">deptno text here.</p>
+		</div>
+
+		<div class="form-group">
+			<label>Dname</label> <input class="form-control" name="dname"
+				th:value="${vo.dname}" readonly="readonly" />
+		</div>
+
+		<div class="form-group">
+			<label>Loc</label> <input class="form-control" name="loc"
+				th:value="${vo.loc}" readonly="readonly" />
+		</div>
+		
+		<div class="pull-right">
+			<a th:href="@{ modify(page=${pageVO.page}, 
+			                size=${pageVO.size}, 
+			                type=${pageVO.type}, 
+			                keyword=${pageVO.keyword},
+			                deptno =${vo.deptno}
+			             )}" class="btn btn-default">Modify/Delete</a> 
+			             
+			<a th:href="@{ list(page=${pageVO.page}, 
+			                size=${pageVO.size}, 
+			                type=${pageVO.type}, 
+			                keyword=${pageVO.keyword},
+			                deptno = ${vo.deptno}
+			             )}" class="btn btn-primary">Go List</a> 
+		</div>
+
+	</div>
+
+</div>
+<!--  end fragment -->
+
+<th:block layout:fragment="script">
+
+	<script th:inline="javascript">
+		
+	</script>
+
+</th:block>
